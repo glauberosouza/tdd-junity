@@ -1,6 +1,7 @@
 package com.glauber.tdd.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Locacao {
     private Cliente cliente;
@@ -64,5 +65,18 @@ public class Locacao {
 
     public void setValor(Double valor) {
         this.valor = valor;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Locacao locacao = (Locacao) o;
+        return Objects.equals(cliente, locacao.cliente) && Objects.equals(carro, locacao.carro) && Objects.equals(alugadoEm, locacao.alugadoEm) && Objects.equals(retornarEm, locacao.retornarEm) && Objects.equals(retornadoEm, locacao.retornadoEm) && Objects.equals(valor, locacao.valor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cliente, carro, alugadoEm, retornarEm, retornadoEm, valor);
     }
 }

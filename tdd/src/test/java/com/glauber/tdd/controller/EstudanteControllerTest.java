@@ -17,6 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 import java.util.Optional;
@@ -88,5 +90,6 @@ class EstudanteControllerTest {
         //ASSERT
         Optional<Estudante> estudanteById = repository.findById(1L);
         Assertions.assertEquals("Glauber", estudanteById.get().getNome());
+        assertThat(estudanteById.get().getNome(), is("Glauber"));
     }
 }

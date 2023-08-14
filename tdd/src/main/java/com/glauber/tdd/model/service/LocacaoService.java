@@ -6,18 +6,23 @@ import com.glauber.tdd.exceptions.NoClientException;
 import com.glauber.tdd.model.Carro;
 import com.glauber.tdd.model.Cliente;
 import com.glauber.tdd.model.Locacao;
+import com.glauber.tdd.model.repository.LocacaoDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class LocacaoService {
 
+public class LocacaoService {
+    @Autowired
+    private LocacaoDAO locacaoDAO;
 
     public Locacao efetuarLocacao(Cliente cliente, Carro carro, LocalDate dataRetorno) {
         validarClienteECarro(cliente, carro);
         var dataDeRetornoValidada = validarEAjustarDataRetorno(dataRetorno);
         var locacao = new Locacao(cliente, carro, dataDeRetornoValidada);
         atualizarEstoque(carro);
+        locacaoDAO.save(locacao);
         return locacao;
     }
 

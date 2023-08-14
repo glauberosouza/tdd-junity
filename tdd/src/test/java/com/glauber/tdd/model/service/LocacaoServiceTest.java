@@ -5,13 +5,31 @@ import com.glauber.tdd.exceptions.NoCarroException;
 import com.glauber.tdd.exceptions.NoClientException;
 import com.glauber.tdd.model.Carro;
 import com.glauber.tdd.model.Cliente;
-import com.glauber.tdd.model.service.LocacaoService;
+import com.glauber.tdd.model.Locacao;
+import com.glauber.tdd.model.repository.LocacaoDAO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
 class LocacaoServiceTest {
+
+    @Mock
+    private LocacaoDAO locacaoDAO;
+    @InjectMocks
+    private LocacaoService locacaoService;
+
     @Test
     @DisplayName("Deve alugar o carro quando todos os campos estiverem ok")
     public void deveAlugarCarro() {
@@ -21,17 +39,19 @@ class LocacaoServiceTest {
 
 
         // Act -> Ação
-        var servico = new LocacaoService();
-        var locacao = servico.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
+        //var servico = new LocacaoService();
+        var locacao = locacaoService.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
 
+        //Mockito.doNothing().when(locacaoDAO).save(isA(Locacao.class));
 
         //Assert -> Verificar as asserções
-        Assertions.assertEquals(100.00, locacao.getValor());
-        Assertions.assertEquals("Gol", locacao.getCarro().getNome());
-        Assertions.assertEquals("João", locacao.getCliente().getNome());
-        Assertions.assertEquals(1, locacao.getCarro().getEstoque());
-        Assertions.assertEquals(LocalDate.now(), locacao.getAlugadoEm());
-        Assertions.assertEquals(LocalDate.now().plusDays(1), locacao.getRetornarEm());
+        verify(locacaoDAO, times(1)).save(locacao);
+        assertEquals(100.00, locacao.getValor());
+        assertEquals("Gol", locacao.getCarro().getNome());
+        assertEquals("João", locacao.getCliente().getNome());
+        assertEquals(1, locacao.getCarro().getEstoque());
+        assertEquals(LocalDate.now(), locacao.getAlugadoEm());
+        assertEquals(LocalDate.now().plusDays(1), locacao.getRetornarEm());
     }
 
     @Test
@@ -72,7 +92,7 @@ class LocacaoServiceTest {
         //ACT
         var locacao = servico.efetuarLocacao(cliente, carro, null);
         //ASSERT
-        Assertions.assertEquals(locacao.getRetornarEm(), LocalDate.now().plusDays(1));
+        assertEquals(locacao.getRetornarEm(), LocalDate.now().plusDays(1));
     }
 
     @Test
@@ -86,7 +106,7 @@ class LocacaoServiceTest {
         var locacao = servico.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
         var locacaoBaixada = servico.darBaixaNaLocacao(locacao, LocalDate.now().plusDays(1));
         //ASSERT
-        Assertions.assertEquals(LocalDate.now().plusDays(1), locacaoBaixada.getRetornadoEm());
+        assertEquals(LocalDate.now().plusDays(1), locacaoBaixada.getRetornadoEm());
     }
 
     @Test
@@ -99,7 +119,7 @@ class LocacaoServiceTest {
         //ACT
         var locacao = servico.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
         //ASSERT
-        Assertions.assertEquals(1, carro.getEstoque());
+        assertEquals(1, carro.getEstoque());
     }
 
     @Test
@@ -113,7 +133,7 @@ class LocacaoServiceTest {
         var locacao = servico.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
         var locacaoBaixada = servico.darBaixaNaLocacao(locacao, LocalDate.now().plusDays(3));
         //ASSERT
-        Assertions.assertEquals(450.00, locacaoBaixada.getValor());
+        assertEquals(450.00, locacaoBaixada.getValor());
     }
 
     @Test
@@ -140,6 +160,6 @@ class LocacaoServiceTest {
         var locacao = servico.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
         var locacaoBaixada = servico.darBaixaNaLocacao(locacao, null);
         //ASSERT
-        Assertions.assertEquals(LocalDate.now(), locacaoBaixada.getRetornadoEm());
+        assertEquals(LocalDate.now(), locacaoBaixada.getRetornadoEm());
     }
 }
