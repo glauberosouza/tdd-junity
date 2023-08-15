@@ -88,9 +88,8 @@ class LocacaoServiceTest {
         //ARRANGE
         var cliente = new Cliente("João");
         var carro = new Carro("Gol", 2, 150.00);
-        var servico = new LocacaoService();
         //ACT
-        var locacao = servico.efetuarLocacao(cliente, carro, null);
+        var locacao = locacaoService.efetuarLocacao(cliente, carro, null);
         //ASSERT
         assertEquals(locacao.getRetornarEm(), LocalDate.now().plusDays(1));
     }
@@ -101,10 +100,9 @@ class LocacaoServiceTest {
         //ARRANGE
         var cliente = new Cliente("João");
         var carro = new Carro("Gol", 2, 150.00);
-        var servico = new LocacaoService();
         //ACT
-        var locacao = servico.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
-        var locacaoBaixada = servico.darBaixaNaLocacao(locacao, LocalDate.now().plusDays(1));
+        var locacao = locacaoService.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
+        var locacaoBaixada = locacaoService.darBaixaNaLocacao(locacao, LocalDate.now().plusDays(1));
         //ASSERT
         assertEquals(LocalDate.now().plusDays(1), locacaoBaixada.getRetornadoEm());
     }
@@ -115,9 +113,8 @@ class LocacaoServiceTest {
         //ARRANGE
         var cliente = new Cliente("João");
         var carro = new Carro("Gol", 2, 150.00);
-        var servico = new LocacaoService();
         //ACT
-        var locacao = servico.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
+        var locacao = locacaoService.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
         //ASSERT
         assertEquals(1, carro.getEstoque());
     }
@@ -128,10 +125,9 @@ class LocacaoServiceTest {
         //ARRANGE
         var cliente = new Cliente("João");
         var carro = new Carro("Gol", 2, 150.00);
-        var servico = new LocacaoService();
         //ACT
-        var locacao = servico.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
-        var locacaoBaixada = servico.darBaixaNaLocacao(locacao, LocalDate.now().plusDays(3));
+        var locacao = locacaoService.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
+        var locacaoBaixada = locacaoService.darBaixaNaLocacao(locacao, LocalDate.now().plusDays(3));
         //ASSERT
         assertEquals(450.00, locacaoBaixada.getValor());
     }
@@ -155,10 +151,9 @@ class LocacaoServiceTest {
         //ARRANGE
         var cliente = new Cliente("João");
         var carro = new Carro("Gol", 2, 150.00);
-        var servico = new LocacaoService();
         //ACT
-        var locacao = servico.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
-        var locacaoBaixada = servico.darBaixaNaLocacao(locacao, null);
+        var locacao = locacaoService.efetuarLocacao(cliente, carro, LocalDate.now().plusDays(1));
+        var locacaoBaixada = locacaoService.darBaixaNaLocacao(locacao, null);
         //ASSERT
         assertEquals(LocalDate.now(), locacaoBaixada.getRetornadoEm());
     }
